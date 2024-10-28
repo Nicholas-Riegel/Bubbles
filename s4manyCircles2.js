@@ -56,14 +56,16 @@ class Particle {
         this.size = Math.random() * 30;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
+        this.hue = Math.random() * 360; // Random color hue
     }
-    update(){
+    update() {
         this.x += this.speedX;
         this.y += this.speedY;
         if (this.size > 0.2) this.size -= 0.05;
+        this.hue += 1; // Gradually change color
     }
-    draw(){
-        ctx.fillStyle = "blue";
+    draw() {
+        ctx.fillStyle = `hsl(${this.hue}, 100%, 50%)`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
         ctx.fill();
