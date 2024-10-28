@@ -51,9 +51,7 @@ class Particle {
     constructor(){
         this.x = mouse.x;
         this.y = mouse.y;
-        // this.x = Math.random() * canvas.width;
-        // this.y = Math.random() * canvas.height; 
-        this.size = Math.random() * 30;
+        this.size = Math.random() * 12;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
         this.hue = Math.random() * 360; // Random color hue
@@ -61,7 +59,7 @@ class Particle {
     update() {
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.size > 0.2) this.size -= 0.05;
+        if (this.size > 0.2) this.size -= 0.01;
         this.hue += 1; // Gradually change color
     }
     draw() {
@@ -81,20 +79,34 @@ class Particle {
 // init();
 
 function handleParticles() {
-    particlesArray.forEach((particle, i) => {
-        particle.update();
-        particle.draw();
-        if (particle.size <= 0.3) {
+    for(let i = 0; i < particlesArray.length; i++){
+        particlesArray[i].update();
+        particlesArray[i].draw();
+        for(let j = i; j < particlesArray.length; j++){
+            const dx = particlesArray[i].x - particlesArray[j].x;
+            const dy = particlesArray[i].y - particlesArray[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 100) {
+                ctx.beginPath();
+                ctx.strokeStyle = `hsl(${particlesArray[i].hue}, 100%, 50%)`;
+                ctx.lineWidth = .5;
+                ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+                ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+        if (particlesArray[i].size <= 0.3) {
             particlesArray.splice(i, 1);
             i--;
         }
-    });
+    }
 }
 
 function animate() {
     // ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
     // ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     handleParticles();
     requestAnimationFrame(animate);
 }
