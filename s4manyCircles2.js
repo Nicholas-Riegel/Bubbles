@@ -11,12 +11,24 @@ let mouse = {
     y: undefined 
 };
 
-canvas.addEventListener("mousemove", (e) => {
-    mouse.x = e.x; 
-    mouse.y = e.y;
+// Update mouse position and add particle
+function addParticles(e) {
+    const touch = e.touches ? e.touches[0] : e;
+    mouse.x = touch.clientX;
+    mouse.y = touch.clientY;
     particlesArray.push(new Particle());
+}
+
+// Handle mouse movement
+canvas.addEventListener("mousemove", (e) => addParticles(e));
+
+// Handle touch movement
+canvas.addEventListener("touchmove", (e) => {
+    e.preventDefault();  // Prevent scrolling
+    addParticles(e);
 });
 
+// Handle mouse click
 canvas.addEventListener("click", (e) => {
     mouse.x = e.x; 
     mouse.y = e.y;
@@ -25,6 +37,16 @@ canvas.addEventListener("click", (e) => {
     }
 });
 
+// Handle touch start (similar to click)
+canvas.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    const touch = e.touches[0];
+    mouse.x = touch.clientX;
+    mouse.y = touch.clientY;
+    for (let i = 0; i < 40; i++){
+        particlesArray.push(new Particle());
+    }
+});
 class Particle {
     constructor(){
         this.x = mouse.x;
