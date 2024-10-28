@@ -31,14 +31,14 @@ class Particle {
         this.y = mouse.y;
         // this.x = Math.random() * canvas.width;
         // this.y = Math.random() * canvas.height; 
-        this.size = Math.random() * 20;
+        this.size = Math.random() * 30;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
     }
     update(){
         this.x += this.speedX;
         this.y += this.speedY;
-        if (this.size > 0.2) this.size -= 0.1;
+        if (this.size > 0.2) this.size -= 0.05;
     }
     draw(){
         ctx.fillStyle = "blue";
